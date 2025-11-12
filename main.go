@@ -36,9 +36,22 @@ func AddAlbum(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, albums)
 }
 
+func GetAlbumById(c *gin.Context) {
+	id := c.Param("id")
+	for _, a := range albums {
+		if a.ID == id {
+			c.IndentedJSON(http.StatusOK, a)
+			return
+		}
+	}
+	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
+}
+
 func main() {
 	mux := gin.Default()
 	mux.GET("/albums", GetallItems)
 	mux.POST("/albums", AddAlbum)
+	mux.GET("/albums/:id", GetAlbumById)
+
 	mux.Run("localhost:8080")
 }
