@@ -25,9 +25,20 @@ func GetallItems(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
+// POST Album
+func AddAlbum(c *gin.Context) {
+	var newAlbm album
+	err := c.BindJSON(&newAlbm)
+	if err != nil {
+		return
+	}
+	albums = append(albums, newAlbm)
+	c.IndentedJSON(http.StatusCreated, albums)
+}
+
 func main() {
 	mux := gin.Default()
 	mux.GET("/albums", GetallItems)
-
+	mux.POST("/albums", AddAlbum)
 	mux.Run("localhost:8080")
 }
